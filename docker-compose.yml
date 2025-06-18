@@ -1,0 +1,40 @@
+version: '3.8'
+
+networks:
+  postgres-network:
+    driver: bridge
+
+services:
+  postgres:
+    container_name: postgres-emp-mini
+    image: postgres
+    environment:
+      POSTGRES_USER: boss
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: employeedb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres-network
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4-emp-mini
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5051:80"
+    networks:
+      - postgres-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  pgadmin-data:
